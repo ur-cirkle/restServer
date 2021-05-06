@@ -40,20 +40,23 @@ const SignUp = async (req, res, db) => {
     //* Inserting Into user_details table
     await db.query(
       `INSERT INTO user_details
-                      (userid,image,DOB,acc_type,timezone,${
-                        latitude && longitude ? "latitude,longitude," : ""
-                      }public)
+                      (userid,image,DOB,acc_type,public)
                       VALUES
                       (
-                          '${initialData.userid}','${initialData.image}','${
-        initialData.dob
-      }','${type}','${initialData.timezone}',${
-        latitude && longitude
-          ? `'${initialData.latitude}','${initialData.longitude}',`
-          : ""
-      }'${initialData.public}'
+                          '${initialData.userid}','${initialData.image}','${initialData.dob}','${type}','${initialData.public}'
                       )`
     );
+    //* Inserting Into users_location
+    if (!latitude && !longitude) {
+      await db.query(
+        `INSERT INTO users_location(userid,timezone,location_visiblity) VALUES('${initialData.userid}','${initialData.timezone}','noone')`
+      );
+    } else {
+      await db.query(
+        `INSERT INTO users_location(userid,timezone,latitude,longitude,location_visiblity) 
+        VALUES('${initialData.userid}','${initialData.timezone}','${latitude}','${longitude}','noone')`
+      );
+    }
     //* Inserting interests
     const predefinedInterests = interests[0].map(
       (interest) => `'${initialData.userid}', '${interest}'`

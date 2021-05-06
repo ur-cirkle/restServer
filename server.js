@@ -23,7 +23,7 @@ const pool = mysql.createPool({
   port: 3306,
 });
 const db = pool.promise();
-// insertDummy(db);
+insertDummy(db);
 //* Middleware
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
