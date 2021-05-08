@@ -8,7 +8,8 @@ require("dotenv").config();
 const { uid } = require("uid");
 app.use(express.json());
 app.use(cors());
-const insertDummy = require("./insertDummyData");
+const fillUserTables = require("./insertDummmy/users_tables");
+const fillConnectionsTables = require("./insertDummmy/connection_tables");
 //* Routes
 const checkUsername = require("./Routes/checkUsername.routes");
 const SignUp = require("./Routes/SignUp.routes");
@@ -23,7 +24,9 @@ const pool = mysql.createPool({
   port: 3306,
 });
 const db = pool.promise();
-insertDummy(db);
+// fillUserTables(db)
+// fillConnectionsTables(db);
+
 //* Middleware
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
