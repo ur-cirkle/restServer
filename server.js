@@ -4,6 +4,8 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
+const imageDataUri = require("image-data-uri");
+const fs = require("fs");
 require("dotenv").config();
 const { uid } = require("uid");
 app.use(express.json());
@@ -26,7 +28,17 @@ const pool = mysql.createPool({
 const db = pool.promise();
 // fillUserTables(db)
 // fillConnectionsTables(db);
-
+fs.readdir("./media", function (err, files) {
+  //handling error
+  if (err) {
+    return console.log("Unable to scan directory: " + err);
+  }
+  //listing all files using forEach
+  files.forEach(function (file) {
+    // Do whatever you want to do with the file
+    console.log(file);
+  });
+});
 //* Middleware
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
