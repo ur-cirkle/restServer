@@ -1,4 +1,4 @@
-module.exports = [
+gimodule.exports = [
   "3D printing",
   "Amateur radio",
   "Scrapbook",

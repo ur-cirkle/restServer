@@ -20,7 +20,7 @@ const pool = mysql.createPool({
   host: "localhost",
   database: "ur_cirkle",
   user: "root",
-  password: "1234567890",
+  password: "123456",
   port: 3306,
 });
 const db = pool.promise();
@@ -43,6 +43,8 @@ app.get("/check/username", (req, res) => checkUsername(req, res, db));
 app.post("/signup", (req, res) => SignUp(req, res, db));
 app.post("/login", (req, res) => Login(req, res, db));
 app.get("/interests", (req, res) => allInterests(req, res, db));
+
+app.get("/")
 
 app.get("/me", verifyToken, (req, res) => {
   res.json({ user: req.user }).status(200);
