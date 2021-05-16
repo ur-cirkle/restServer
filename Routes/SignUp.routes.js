@@ -22,8 +22,11 @@ const SignUp = async (req, res, db) => {
       "https://www.ctvalleybrewing.com/wp-content/uploads/2017/04/avatar-placeholder.png"
     );
 
-    //* Creating User Image File in Media with name {username}.{imageExtensio}
-    const image = await imageDataUri.outputFile(datauri, `./media/${username}`);
+    //* Creating User Image File in Media with name username/avatar.{imageExtension}
+    const image = await imageDataUri.outputFile(
+      datauri,
+      `./media/${username}/avatar`
+    );
     const initialData = {
       userid: uid(),
       image,
