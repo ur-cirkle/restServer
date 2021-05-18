@@ -1,3 +1,4 @@
+const imageDataUri = require("image-data-uri");
 const SearchedName = async (req, res, db) => {
   const { userid } = req.user;
   const { search } = req.query;
@@ -12,23 +13,30 @@ const SearchedName = async (req, res, db) => {
 
   const countingTotalNumberOFInterestOfTheUser = row1[0].firstOneCounting;
 
-  let sql = `select all_users.userid,all_users.username from (select substring(username,1,'${searchNameLength}') as c1 ,userid from all_users) as c2 ,all_users where c2.c1='${search}'  and all_users.userid = c2.userid;`;
+  let sql = `SELECT all_users.userid,username,image FROM all_users JOIN user_details ON all_users.userid = user_details.userid WHERE all_users.username LIKE '${search}%'`;
   const [rawData] = await db.query(sql);
 
   var loop;
   const ranking = { 5: [], 4: [], 3: [], 2: [], 1: [], 0: [] };
   for (loop in rawData) {
+    console.log(rawData);
     sql = `select ur_cirkle.matchingSearchbar(${countingTotalNumberOFInterestOfTheUser},'${userid}','${rawData[loop].userid}') as totalMatching; `;
     const [row1, column1] = await db.query(sql);
 
-    const { username, userid: friendid } = rawData[loop];
-    ranking[row1[0].totalMatching].push({ username, userid: friendid });
+    const { username, userid: friendid, image } = rawData[loop];
+    const datauri = await imageDataUri.encodeFromFile(image);
+
+    ranking[row1[0].totalMatching].push({
+      username,
+      userid: friendid,
+      image_url: datauri,
+    });
   }
   var mainArray = [];
   for (loop in ranking) {
     mainArray.push(...ranking[loop]);
   }
-  console.log(mainArray);
+
   res.json(mainArray).status(200);
 };
 

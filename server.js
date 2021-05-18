@@ -50,6 +50,7 @@ app.post("/login", (req, res) => Login(req, res, db));
 app.get("/interests", (req, res) => allInterests(req, res, db));
 
 app.get("/search", verifyToken, (req, res) => serchedNames(req, res, db));
+app.get("/metion/username", verifyToken, (req, res) => mentionAutocomplete());
 app.get("/me", verifyToken, (req, res) => {
   res.json({ user: req.user }).status(200);
 });
