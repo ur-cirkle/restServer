@@ -17,33 +17,25 @@ const checkUsername = require("./Routes/checkUsername.routes");
 const SignUp = require("./Routes/SignUp.routes");
 const Login = require("./Routes/Login.routes");
 const allInterests = require("./Routes/allInterests.routes");
+const serchedNames = require("./Routes/SearchedName.routes");
 //* Connecting Database
 const pool = mysql.createPool({
   host: "localhost",
   database: "ur_cirkle",
   user: "root",
-  password: "123456",
+  password: "1234567890",
   port: 3306,
 });
 const db = pool.promise();
-// fillUserTables(db)
+// fillUserTables(db);
 // fillConnectionsTables(db);
-fs.readdir("./media", function (err, files) {
-  //handling error
-  if (err) {
-    return console.log("Unable to scan directory: " + err);
-  }
-  //listing all files using forEach
-  files.forEach(function (file) {
-    // Do whatever you want to do with the file
-    console.log(file);
-  });
-});
+
 //* Middleware
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
   if (bearerHeader === undefined) return res.sendStatus(403);
   const token = bearerHeader.split(" ")[1];
+  console.log(bearerHeader);
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
     const { user } = decoded;
@@ -51,13 +43,13 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+console.log(uid());
 app.get("/check/username", (req, res) => checkUsername(req, res, db));
 app.post("/signup", (req, res) => SignUp(req, res, db));
 app.post("/login", (req, res) => Login(req, res, db));
 app.get("/interests", (req, res) => allInterests(req, res, db));
 
-app.get("/")
-
+app.get("/search", verifyToken, (req, res) => serchedNames(req, res, db));
 app.get("/me", verifyToken, (req, res) => {
   res.json({ user: req.user }).status(200);
 });

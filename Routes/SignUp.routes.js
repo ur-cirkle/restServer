@@ -14,14 +14,8 @@ const SignUp = async (req, res, db) => {
     longitude,
     interests,
   } = req.body;
-  console.log(req.body);
+  const datauri = await imageDataUri.encodeFromFile("./media/demo.png");
   try {
-    //- Generating Dummy Data
-    //* Datauri
-    const datauri = await imageDataUri.encodeFromURL(
-      "https://www.ctvalleybrewing.com/wp-content/uploads/2017/04/avatar-placeholder.png"
-    );
-
     //* Creating User Image File in Media with name username/avatar.{imageExtension}
     const image = await imageDataUri.outputFile(
       datauri,
@@ -56,43 +50,16 @@ const SignUp = async (req, res, db) => {
       );
     } else {
       await db.query(
-        `INSERT INTO users_location(userid,timezone,latitude,longitude,location_visiblity) 
+        `INSERT INTO users_location(userid,timezone,latitude,longitude,location_visiblity)
         VALUES('${initialData.userid}','${initialData.timezone}','${latitude}','${longitude}','noone')`
       );
     }
     //* Inserting interests
-    const predefinedInterests = interests[0].map(
-      (interest) => `'${initialData.userid}', '${interest}'`
-    );
-    const customInterest = [];
-    const customInterestWithUserid = [];
-    for (let interest of interests[1]) {
-      const interestId = uid();
-      customInterest.push(`'${interestId}', '${interest}','custom'`);
-      customInterestWithUserid.push(`'${initialData.userid}', '${interestId}'`);
-    }
-
-    if (customInterest.length > 0) {
+    for (let interest of interests) {
       await db.query(
-        `INSERT INTO all_interests(id, interest,interest_type) VALUES(${customInterest.join(
-          "),("
-        )})`
-      );
-      await db.query(
-        `INSERT INTO user_interests(userid, interest_id) VALUES(${customInterestWithUserid.join(
-          "),("
-        )})`
+        `INSERT INTO all_interests values('${interest}','${initialData.userid}')`
       );
     }
-
-    if (predefinedInterests.length > 0) {
-      await db.query(
-        `INSERT INTO user_interests (userid, interest_id) VALUES(${predefinedInterests.join(
-          "),("
-        )})`
-      );
-    }
-
     const token = jwt.sign(
       { user: { username, userid: initialData.userid, email } },
       process.env.JWT_SECRET

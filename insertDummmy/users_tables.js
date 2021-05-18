@@ -7,11 +7,11 @@ const insertDummyData = async (db) => {
   };
   // Inserting Predefined Interest;
 
-  const interests = all_interests.map(
-    (interest) => `'${uid(12)}', '${interest}'`
-  );
+  const interests = all_interests.map((interest) => `'${interest}'`);
   // await db.query(
-  //   `INSERT INTO all_interests(id, interest) VALUES (${interests.join("),(")})`
+  //   `INSERT INTO predefined_interests (interest) VALUES (${interests.join(
+  //     "),("
+  //   )})`
   // );
   //* All users
   //** userid   : uid(11)
@@ -64,8 +64,7 @@ const insertDummyData = async (db) => {
       '${userid}','${faker.image.avatar()}','${faker.lorem.sentence()}','${randomDOB()}','${random(
       ["personal", "community"]
     )}','${random(["male", "female", "other", "not decided"])}','${random([
-      0,
-      1,
+      0, 1,
     ])}'
     `);
     users_location.push(
@@ -74,23 +73,23 @@ const insertDummyData = async (db) => {
     user_socketid.push(`'${userid}','${uid(15)}'`);
   }
 
-  await db.query(`INSERT INTO all_users (userid,username,password,email)
-                                        VALUES(${all_users.join("),(")});
-                        `);
-  await db.query(`INSERT INTO ur_cirkle.user_details
-            (userid, image, bio, DOB, acc_type, gender, public)
-            VALUES(${user_details.join("),(")});
-            `);
-  await db.query(`INSERT INTO ur_cirkle.users_location
-          (userid, timezone, latitude, longitude)
-          VALUES(${users_location.join("),(")});`);
-  await db.query(`INSERT INTO ur_cirkle.users_socketid
-        (userid, socketid)
-        VALUES(${user_socketid.join("),(")});
-        `);
-  await db.query(`INSERT INTO ur_cirkle.user_interests
-      (userid, interest_id)
-      VALUES(${user_interests.join("),(")});
-      `);
+  // await db.query(`INSERT INTO all_users (userid,username,password,email)
+  //                                       VALUES(${all_users.join("),(")});
+  //                       `);
+  // await db.query(`INSERT INTO ur_cirkle.user_details
+  //           (userid, image, bio, DOB, acc_type, gender, public)
+  //           VALUES(${user_details.join("),(")});
+  //           `);
+  // await db.query(`INSERT INTO ur_cirkle.users_location
+  //         (userid, timezone, latitude, longitude)
+  //         VALUES(${users_location.join("),(")});`);
+  // await db.query(`INSERT INTO ur_cirkle.users_socketid
+  //       (userid, socketid)
+  //       VALUES(${user_socketid.join("),(")});
+  //       `);
+  // await db.query(`INSERT INTO ur_cirkle.user_interests
+  //     (userid, interest_id)
+  //     VALUES(${user_interests.join("),(")});
+  //     `);
 };
 module.exports = insertDummyData;
