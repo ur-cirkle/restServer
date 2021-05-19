@@ -10,6 +10,7 @@
     "moment-timezone": "^0.5.33",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
+    "typescript": "^4.2.4",
     "uid": "^2.0.0"
   },
   "scripts": {
@@ -20,7 +21,6 @@
   "version": "1.0.0",
   "description": "Rest Server For UR Cirkle",
   "main": "server.js",
-  "devDependencies": {},
   "author": "",
   "license": "ISC"
 }

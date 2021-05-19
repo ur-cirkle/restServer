@@ -35,7 +35,6 @@ const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
   if (bearerHeader === undefined) return res.sendStatus(403);
   const token = bearerHeader.split(" ")[1];
-  console.log(bearerHeader);
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
     const { user } = decoded;

@@ -24,7 +24,10 @@ const SearchedName = async (req, res, db) => {
     const [row1, column1] = await db.query(sql);
 
     const { username, userid: friendid, image } = rawData[loop];
-    const datauri = await imageDataUri.encodeFromFile(image);
+
+    const datauri = !image.includes("https://")
+      ? await imageDataUri.encodeFromFile(image)
+      : image;
 
     ranking[row1[0].totalMatching].push({
       username,
