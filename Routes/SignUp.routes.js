@@ -9,11 +9,12 @@ const SignUp = async (req, res, db) => {
     email,
     type,
     timezone,
-    dob,
     latitude,
     longitude,
     interests,
+    device,
   } = req.body;
+  console.log(req.body);
   const datauri = await imageDataUri.encodeFromFile("./media/demo.png");
   try {
     //* Creating User Image File in Media with name username/avatar.{imageExtension}
@@ -24,7 +25,6 @@ const SignUp = async (req, res, db) => {
     const initialData = {
       userid: uid(),
       image,
-      dob,
       timezone,
       latitude,
       longitude,
@@ -37,10 +37,10 @@ const SignUp = async (req, res, db) => {
     //* Inserting Into user_details table
     await db.query(
       `INSERT INTO user_details
-                      (userid,image,DOB,acc_type,public)
+                      (userid,image,acc_type,public)
                       VALUES
                       (
-                          '${initialData.userid}','${initialData.image}','${initialData.dob}','${type}','${initialData.public}'
+                          '${initialData.userid}','${initialData.image}','${type}','${initialData.public}'
                       )`
     );
     //* Inserting Into users_location
@@ -60,8 +60,12 @@ const SignUp = async (req, res, db) => {
         `INSERT INTO all_interests values('${interest}','${initialData.userid}')`
       );
     }
+    const deviceid = uid(13);
+    //* Adding New Device to  user Devices
+    await db.query(`INSERT INTO user_devices (deviceid, userid, device, location, logged_on) VALUES('${deviceid}', '${initialData.userid}', '${device}', '${timezone}', CURRENT_TIMESTAMP);
+`);
     const token = jwt.sign(
-      { user: { username, userid: initialData.userid, email } },
+      { user: { username, userid: initialData.userid, deviceid } },
       process.env.JWT_SECRET
     );
     return res.json({
