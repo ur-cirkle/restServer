@@ -19,12 +19,11 @@ const serchedNames = require("./Routes/SearchedName.routes");
 const gettingUserDetail = require("./Routes/gettingUserDetail.routes");
 //* Connecting Database
 const pool = mysql.createPool({
-  host: "database-1.cjwgkka2py2d.us-east-2.rds.amazonaws.com",
-  database: "ur_cirkle",
-  user: "root",
-  password: "12345678",
-  port: 3306,
-  debug:false,
+  host:process.env.host,
+  database: process.env.database,
+  user: process.env.user,
+  password: process.env.password,
+  port: process.env.port,
 });
 
 const db = pool.promise();
