@@ -14,7 +14,7 @@ const SignUp = async (req, res, db) => {
     interests,
     device,
   } = req.body;
-  console.log(req.body);
+  console.log(req.body)
   const datauri = await imageDataUri.encodeFromFile("./media/demo.png");
   try {
     //* Creating User Image File in Media with name username/avatar.{imageExtension}
@@ -34,6 +34,12 @@ const SignUp = async (req, res, db) => {
     await db.query(
       `INSERT INTO all_users (userid,username,password,email) VALUES ('${initialData.userid}','${username}','${password}','${email}')`
     );
+    console.log(`INSERT INTO user_details
+                      (userid,image,acc_type,public)
+                      VALUES
+                      (
+                          '${initialData.userid}','${initialData.image}','${type}','${initialData.public}'
+                      )`);
     //* Inserting Into user_details table
     await db.query(
       `INSERT INTO user_details
@@ -43,6 +49,7 @@ const SignUp = async (req, res, db) => {
                           '${initialData.userid}','${initialData.image}','${type}','${initialData.public}'
                       )`
     );
+    
     //* Inserting Into users_location
     if (!latitude && !longitude) {
       await db.query(

@@ -5,8 +5,7 @@ const insertDummyData = async (db) => {
   const random = (arr) => {
     return arr[Math.floor(Math.random() * arr.length)];
   };
-  // Inserting Predefined Interest;
-
+  //- Inserting Predefined Interest;
   const interests = all_interests.map((interest) => `'${interest}'`);
   // await db.query(
   //   `INSERT INTO predefined_interests (interest) VALUES (${interests.join(
@@ -59,7 +58,6 @@ const insertDummyData = async (db) => {
   const coordinates = [[[]]];
 
   let count = 0;
-  console.log("kjsljlfdasj");
   for (let i = 0; i < 500; i++) {
     const userid = uid(11);
 
@@ -99,63 +97,26 @@ const insertDummyData = async (db) => {
         ],
       },
     });
-    community.push({
-      type: "Feature",
-      properties: {
-        description: faker.lorem.paragraph(),
-        icon: random(["theatre-15", "bar-15", "theatre-15"]),
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [
-          Number(faker.address.longitude()),
-          Number(faker.address.latitude()),
-        ],
-      },
-    });
-
-    coordinates.push([]);
-    for (let j = 0; j < 10; j++) {
-      coordinates[count].push(
-        community[community.length - 1].geometry.coordinates
-      );
-      coordinates[count].push([
-        Number(faker.address.longitude()),
-        Number(faker.address.latitude()),
-      ]);
-    }
     count++;
   }
-  fs.writeFile(
-    "./jeoDat.json",
-    `{
-    "bar-15":${JSON.stringify(community)}
-    "theatre-15":${JSON.stringify(personal)}
-  }`,
-    (err) => {
-      if (err) return console.log(err);
-    }
-  );
-
-  // // console.log(user_interests);
-  // await db.query(`INSERT INTO all_users (userid,username,password,email)
-  //                                       VALUES(${all_users.join("),(")});
-  //                       `);
-  // await db.query(`INSERT INTO ur_cirkle.user_details
-  //           (userid, image, bio, DOB, acc_type, gender, public)
-  //           VALUES(${user_details.join("),(")});
-  //           `);
-  // await db.query(`INSERT INTO ur_cirkle.users_location
-  //         (userid, timezone, latitude, longitude)
-  //         VALUES(${users_location.join("),(")});`);
-  // await db.query(`INSERT INTO ur_cirkle.users_socketid
-  //       (userid, socketid)
-  //       VALUES(${user_socketid.join("),(")});
-  //       `);
-  // await db.query(`INSERT INTO ur_cirkle.all_interests
-  //     (userid, interests)
-  //     VALUES(${user_interests.join("),(")});
-  //     `);
+  await db.query(`INSERT INTO all_users (userid,username,password,email)
+                                        VALUES(${all_users.join("),(")});
+                        `);
+  await db.query(`INSERT INTO ur_cirkle.user_details
+            (userid, image, bio, DOB, acc_type, gender, public)
+            VALUES(${user_details.join("),(")});
+            `);
+  await db.query(`INSERT INTO ur_cirkle.users_location
+          (userid, timezone, latitude, longitude)
+          VALUES(${users_location.join("),(")});`);
+  await db.query(`INSERT INTO ur_cirkle.users_socketid
+        (userid, socketid)
+        VALUES(${user_socketid.join("),(")});
+        `);
+  await db.query(`INSERT INTO ur_cirkle.all_interests
+      (userid, interests)
+      VALUES(${user_interests.join("),(")});
+      `);
   const user = {
     type: random(["community", "personal"]),
     username: faker.internet.userName(),

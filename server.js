@@ -13,18 +13,20 @@ const fillConnectionsTables = require("./insertDummmy/connection_tables");
 //* Routes
 const checkUsername = require("./Routes/checkUsername.routes");
 const SignUp = require("./Routes/SignUp.routes");
-const Login = require("./Routes/Login.routes");
+const Login = require("./Routes/LogIn.routes");
 const allInterests = require("./Routes/allInterests.routes");
 const serchedNames = require("./Routes/SearchedName.routes");
 const gettingUserDetail = require("./Routes/gettingUserDetail.routes");
 //* Connecting Database
 const pool = mysql.createPool({
-  host: "localhost",
+  host: "database-1.cjwgkka2py2d.us-east-2.rds.amazonaws.com",
   database: "ur_cirkle",
   user: "root",
-  password: "1234567890",
+  password: "12345678",
   port: 3306,
+  debug:false,
 });
+
 const db = pool.promise();
 //fillUserTables(db);
 //fillConnectionsTables(db);
@@ -55,10 +57,9 @@ app.get("/interests", (req, res) => allInterests(req, res, db));
 app.get("/search", verifyToken, (req, res) => serchedNames(req, res, db));
 app.get("/metion/username", verifyToken, (req, res) => mentionAutocomplete());
 app.get("/me", verifyToken, (req, res) => {
-  console.log("djssld");
   res.json({ user: req.user }).status(200);
 });
-app.get("/profile", verifyToken, (req, res) => gettingUserDetail(req, res, db));
+app.get("/profile", (req, res) => gettingUserDetail(req, res, db));
 const port = 5000 || process.env.PORT;
 
 app.listen(port, () => {
