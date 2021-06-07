@@ -12,6 +12,7 @@ const fillUserTables = require("./insertDummmy/users_tables");
 const fillConnectionsTables = require("./insertDummmy/connection_tables");
 //* Routes
 const checkUsername = require("./Routes/checkUsername.routes");
+const blogDraftSaving = require("./Routes/blogDraftSaving.routes")
 const SignUp = require("./Routes/SignUp.routes");
 const Login = require("./Routes/LogIn.routes");
 const allInterests = require("./Routes/allInterests.routes");
@@ -50,6 +51,7 @@ const verifyToken = (req, res, next) => {
 
 app.get("/check/username", (req, res) => checkUsername(req, res, db));
 app.post("/signup", (req, res) => SignUp(req, res, db));
+app.post("/draftSaving", (req, res) => SignUp(req, res, db));
 app.post("/login", (req, res) => Login(req, res, db));
 app.get("/interests", (req, res) => allInterests(req, res, db));
 
