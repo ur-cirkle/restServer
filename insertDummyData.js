@@ -32,6 +32,8 @@ const insertDummyData = async (db) => {
       accVisibility[Math.floor(Math.random() * accVisibility.length)]
     );
   };
+
+
   //* All users
   //** userid uid()
   //** username: faker.internet.userName()
